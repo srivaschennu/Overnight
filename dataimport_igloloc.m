@@ -1,4 +1,4 @@
-function dataimport_igloloc(basename,firstepoch,lastepoch)
+function dataimport_igloloc(basename,sessnum)
 
 loadpaths
 
@@ -13,24 +13,34 @@ end
 mfffiles = filenames(logical(cell2mat({filenames.isdir})));
 if length(mfffiles) > 1
     error('Expected 1 MFF recording file. Found %d.\n',length(mfffiles));
-
-elseif isempty(mfffiles)
-    % check for and import NSF file
-    if length(filenames) ~= 1
-        error('Expected 1 NSF recording file. Found %d.\n',length(filenames));
-    else
-        filename = filenames.name;
-        fprintf('\nProcessing %s.\n\n', filename);
-        EEG = pop_readegi(sprintf('%s%s', filepath, filename));
-        for e = 1:length(EEG.event)
-            EEG.event(e).codes = {'DUMM',0};
-        end
-    end
-    
 else
     filename = mfffiles.name;
     fprintf('\nProcessing %s.\n\n', filename);
-    EEG = pop_readegimff(sprintf('%s%s', filepath, filename),'firstepoch',firstepoch,'lastepoch',lastepoch);
+    
+    mffjarpath = which('MFF-1.0.d0004.jar');
+    javaaddpath(mffjarpath);
+    evt = read_mff_event(sprintf('%s%s', filepath, filename));
+    javarmpath(mffjarpath);
+    
+    firstsample = 0;
+    lastsample = 0;
+    sesscount = 1;
+    for e = 1:length(evt)
+        if strcmp(evt(e).type,'BGIN') && ~isempty(evt(e).codes) && sum(strcmp('BNUM',evt(e).codes(:,1))) == 1 && ...
+                evt(e).codes{strcmp('BNUM',evt(e).codes(:,1)),2} == 1
+            if sesscount == sessnum
+                firstsample = evt(e).sample-1;
+            else
+                sesscount = sesscount+1;
+            end
+        end
+        if firstsample > 0 && strcmp(evt(e).type,'BEND') && evt(e).codes{strcmp('BNUM',evt(e).codes(:,1)),2} == 10
+            lastsample = evt(e).sample+1;
+            break;
+        end
+    end
+    
+    EEG = pop_readegimff(sprintf('%s%s', filepath, filename),'firstsample',firstsample,'lastsample',lastsample);
 end
 
 EEG = eeg_checkset(EEG);
@@ -85,8 +95,8 @@ fprintf('High-pass filtering above %dHz...\n',hpfreq);
 EEG = pop_eegfilt(EEG, hpfreq, 0, [], [0], 0, 0, 'fir1', 0);
 
 
-EEG.setname = sprintf('%s_orig',basename);
-EEG.filename = sprintf('%s_orig.set',basename);
+EEG.setname = sprintf('%s_%d_orig',basename,sessnum);
+EEG.filename = sprintf('%s_%d_orig.set',basename,sessnum);
 EEG.filepath = filepath;
 
 fprintf('Saving %s%s.\n', EEG.filepath, EEG.filename);
