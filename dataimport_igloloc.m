@@ -1,10 +1,11 @@
 function dataimport_igloloc(basename,sessnum)
 
-loadpaths
+rawpath = '/Volumes/iStorage/Overnight/';
+filepath = '/Users/chennu/Data/iGloLoc/';
 
 chanexcl = [1,8,14,17,21,25,32,38,43,44,48,49,56,63,64,68,69,73,74,81,82,88,89,94,95,99,107,113,114,119,120,121,125,126,127,128];
 
-filenames = dir(sprintf('%s%s*', filepath, basename));
+filenames = dir(sprintf('%s%s*', rawpath, basename));
 
 if isempty(filenames)
     error('No files found to import!\n');
@@ -19,7 +20,7 @@ else
     
     mffjarpath = which('MFF-1.0.d0004.jar');
     javaaddpath(mffjarpath);
-    evt = read_mff_event(sprintf('%s%s', filepath, filename));
+    evt = read_mff_event(sprintf('%s%s', rawpath, filename));
     javarmpath(mffjarpath);
     
     firstsample = 0;
@@ -40,7 +41,7 @@ else
         end
     end
     
-    EEG = pop_readegimff(sprintf('%s%s', filepath, filename),'firstsample',firstsample,'lastsample',lastsample);
+    EEG = pop_readegimff(sprintf('%s%s', rawpath, filename),'firstsample',firstsample,'lastsample',lastsample);
 end
 
 EEG = eeg_checkset(EEG);
