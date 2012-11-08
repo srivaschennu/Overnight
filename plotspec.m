@@ -1,4 +1,13 @@
-function plotspec(EEG,freqwin)
+function plotspec(basename,freqwin)
+
+loadpaths
+
+if ischar(basename)
+    EEG = pop_loadset('filepath',filepath,'filename',[basename '.set']);
+else
+    EEG = basename;
+    clear basename
+end
 
 fontsize = 16;
 chanlist = {'Fp2','Fz','Fp1','F3','F7','C3','T3','P3','T5','Pz','O1','Oz','O2','P4','T6','C4','T4','F8','F4'};

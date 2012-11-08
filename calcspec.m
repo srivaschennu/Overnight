@@ -1,4 +1,8 @@
-function EEG = calcspec(EEG)
+function calcspec(basename)
+
+loadpaths
+
+EEG = pop_loadset('filepath',filepath,'filename',[basename '.set']);
 
 for e = 1:EEG.trials
     if e == 1
@@ -12,3 +16,6 @@ for e = 1:EEG.trials
     [~,EEG.spectra(:,:,e)] = evalc('spectopo(EEG.data(:,:,e),EEG.pnts,EEG.srate,''plot'',''off'')');
 end
 close(wb_h);
+
+EEG.saved = 'no';
+pop_saveset(EEG,'savemode','resave');
