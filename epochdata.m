@@ -3,7 +3,7 @@ function epochdata(basename)
 loadpaths
 
 %% EPOCH LENGTH
-epochlength = 4; %sec
+epochlength = 30; %sec
 
 EEG = pop_loadset('filepath',filepath,'filename',[basename '_orig.set']);
 
