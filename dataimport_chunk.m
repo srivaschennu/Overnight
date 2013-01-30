@@ -1,7 +1,6 @@
 function dataimport_chunk(basename,startsec,endsec,chunkname)
 
-rawpath = '/Volumes/iStorage/Overnight/';
-filepath = '/Users/chennu/Data/Overnight/';
+loadpaths
 
 filenames = dir(sprintf('%s%s*', rawpath, basename));
 
