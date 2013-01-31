@@ -135,6 +135,8 @@ while GetSecs <= stoptime
         evtime = GetSecs;
         NetStation('StopRecording');
         pause(1);
+        NetStation('Synchronize');
+        pause(1);
         NetStation('StartRecording');
     end
     
@@ -146,6 +148,7 @@ while GetSecs <= stoptime
             while GetChar ~= ' '
             end
             fprintf('Continuing...\n');
+            NetStation('Synchronize');
             pause(1);
             NetStation('StartRecording');
             
