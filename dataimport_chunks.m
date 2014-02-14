@@ -45,9 +45,9 @@ for chunk = 1:length(chunkends)
     hpfreq = 0.5;
     lpfreq = 45;
     fprintf('Low-pass filtering below %.1fHz...\n',lpfreq);
-    EEG = pop_eegfilt(EEG, 0, lpfreq, [], [0], 0, 0, 'fir1', 0);
+    EEG = pop_eegfiltnew(EEG, 0, lpfreq);
     fprintf('High-pass filtering above %.1fHz...\n',hpfreq);
-    EEG = pop_eegfilt(EEG, hpfreq, 0, [], [0], 0, 0, 'fir1', 0);
+    EEG = pop_eegfiltnew(EEG, hpfreq, 0);
     
     %Remove line noise
     fprintf('Removing line noise at 50Hz.\n');

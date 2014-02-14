@@ -91,10 +91,10 @@ for c = 1:length(datachunks)-1
     
     lpfreq = 45;
     fprintf('Low-pass filtering below %dHz...\n',lpfreq);
-    EEGchunk = pop_eegfilt(EEGchunk, 0, lpfreq, [], [0], 0, 0, 'fir1', 0);
+    EEGchunk = pop_eegfiltnew(EEGchunk, 0, lpfreq);
     hpfreq = 0.5;
     fprintf('High-pass filtering above %dHz...\n',hpfreq);
-    EEGchunk = pop_eegfilt(EEGchunk, hpfreq, 0, [], [0], 0, 0, 'fir1', 0);
+    EEGchunk = pop_eegfiltnew(EEGchunk, hpfreq, 0);
     
     if exist('EEG','var') && isstruct(EEG)
         EEG = pop_mergeset(EEG,EEGchunk);
