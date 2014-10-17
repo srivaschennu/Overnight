@@ -1,5 +1,7 @@
 function bpower = bandpower(basename,channame,freqwin)
 
+loadpaths
+
 if ischar(basename)
     EEG = pop_loadset('filepath',filepath,'filename',[basename '.set']);
 else
