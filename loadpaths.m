@@ -1,3 +1,3 @@
 
-rawpath = '/Volumes/iStorage/Overnight/';
-filepath = '/Users/chennu/Data/Overnight/';
+rawpath = '/Users/chennu/BigData/Overnight/';
+filepath = '/Users/chennu/Data/Gobert-Lyon/';
